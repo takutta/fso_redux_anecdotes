@@ -25,21 +25,21 @@ jobs:
       - name: Deploy to Render
         if: ${{ github.event_name == 'push' && !contains(github.event.head_commit.message, '#skip') }}
         run: curl https://api.render.com/deploy/srv-${{ secrets.RENDER_SERVICE_ID }}?key=${{ secrets.RENDER_API_KEY }}
-      # - name: New version
-      #   if: ${{ success() && github.event_name == 'push' && !contains(github.event.head_commit.message, '#skip') }}
-      #   uses: rjstone/discord-webhook-notify@v1
-      #   with:
-      #       severity: info
-      #       text: A new version of Pokedex deployed
-      #       webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
-      # - name: Build of Pokedex failed
-      #   uses: rjstone/discord-webhook-notify@v1
-      #   if: failure()
-      #   with:
-      #       severity: error
-      #       text: Build failed
-      #       details: ${{ github.event.repository.html_url }}/commit/${{ github.sha }} by ${{ github.actor }} "${{ github.event.head_commit.message }}"
-      #       webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+      - name: New version
+        if: ${{ success() && github.event_name == 'push' && !contains(github.event.head_commit.message, '#skip') }}
+        uses: rjstone/discord-webhook-notify@v1
+        with:
+            severity: info
+            text: A new version of Pokedex deployed
+            webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+      - name: Build of Pokedex failed
+        uses: rjstone/discord-webhook-notify@v1
+        if: failure()
+        with:
+            severity: error
+            text: Build failed
+            details: ${{ github.event.repository.html_url }}/commit/${{ github.sha }} by ${{ github.actor }} "${{ github.event.head_commit.message }}"
+            webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
 
   tag_release:
     if: ${{ github.event_name == 'push' && !contains(github.event.head_commit.message, '#skip') }}
